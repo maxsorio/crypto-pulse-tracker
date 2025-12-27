@@ -150,12 +150,17 @@ const CryptoTable = () => {
 
   const sortedData = getSortedData();
 
+  // Get column index for alternating colors
+  const getColumnColor = (colIndex: number) => {
+    return colIndex % 2 === 0 ? 'bg-secondary/20' : 'bg-secondary/40';
+  };
+
   return (
-    <div className="w-full overflow-x-auto rounded-lg border border-border bg-card shadow-lg">
+    <div className="w-full overflow-x-auto rounded-lg border border-border bg-card shadow-lg max-h-[80vh]">
       <table className="w-full min-w-max">
-        <thead>
-          <tr className="bg-secondary/50">
-            {columns.map((column) => (
+        <thead className="sticky top-0 z-20">
+          <tr className="bg-card border-b border-border">
+            {columns.map((column, colIndex) => (
               <th
                 key={column.id}
                 draggable
@@ -166,6 +171,7 @@ const CryptoTable = () => {
                 className={cn(
                   "group relative px-4 py-3 text-left text-sm font-semibold text-foreground transition-all cursor-move select-none",
                   column.width,
+                  getColumnColor(colIndex),
                   hoveredColumn === column.id && "bg-primary/20",
                   draggedColumn === column.id && "opacity-50"
                 )}
@@ -217,8 +223,8 @@ const CryptoTable = () => {
               className="table-row-hover animate-slide-in"
               style={{ animationDelay: `${index * 30}ms` }}
             >
-              {columns.map((column) => (
-                <td key={column.id} className={cn("px-4 py-3 text-sm", column.width)}>
+              {columns.map((column, colIndex) => (
+                <td key={column.id} className={cn("px-4 py-3 text-sm", column.width, getColumnColor(colIndex))}>
                   {column.id === 'num' && (
                     <span className="text-muted-foreground font-medium">{crypto.id}</span>
                   )}
